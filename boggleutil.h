@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iostream>
 
 using namespace std;
 
@@ -28,6 +29,10 @@ class BogVertex{
         // Getters and setters for the visited state of the vertex
         bool wasVisited();
         void setVisited(bool visited);
+        
+        // Getter for the adjcaceny vector
+        vector<BogVertex*> getAdj();
+        void setAdj(BogVertex* vert);
     private:
         // Adjaceny vector for the vertex
         vector<BogVertex*> adj;
@@ -62,9 +67,19 @@ class BogGraph{
          * Adds an edge to the graph between the two positions provided
          */
         void addEdge(int p1, int p2);
+
+        // Getter and setters for number of columns
+        int getCols();
+        void setCols(int columns);
+
+        // Getter for the boardMap
+        map <int, BogVertex*> getMap();
     private:
         // Map containing the dice faces stored as BogVertices
         map <int, BogVertex*> boardMap;
+
+        // Kepps track of the number of columns of the board
+        int numCols;
 };
 
 class LST{

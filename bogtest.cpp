@@ -9,24 +9,33 @@
 #include <string>
 #include <set>
 
+using namespace std;
+
 int main (int argc, char* argv[]) {
 
-  BaseBogglePlayer * p = new BogglePlayer();
+  BogglePlayer * p = new BogglePlayer();
   set<string> lex;
   string wordA("a");
   string wordX("x");
   lex.insert(wordA);
   lex.insert("z");
-  string row0[] = {"D","C"};
-  string row1[] = {"b","A"};
-  string* board[] = {row0,row1};
+  string row0[] = {"D ","C ", "R ", "BOB"};
+  string row1[] = {"b ","A ", "Z ", "DUDE"};
+  string row2[] = {"DC ", "BB ", "CC ", "REKT "};
+  string row3[] = {"Lo ", "To ", "Bo ", "Pwnt "};
+  string* board[] = {row0,row1,row2,row3};
   set<string> words;
   vector<int> locations;
 
 //  p->buildLexicon(lex);
-
-  p->setBoard(2,2,board);
-
+  p->setBoard(4,4,board);
+  for(int i = 0; i < 16; i++){    
+     cout << "Key " << p->getBoard().getMap()[i]->getLetters() << ": ";
+     for(BogVertex* hi : p->getBoard().getMap()[i]->getAdj()){
+         cout << hi->getLetters() << " ";
+     }
+     cout << endl;
+  }
 /*  if(p->isInLexicon(wordX)) {
     std::cerr << "Apparent problem with isInLexicon #1." << std::endl;
     return -1;

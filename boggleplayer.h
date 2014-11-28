@@ -6,6 +6,7 @@
 
 #include <set>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -66,13 +67,15 @@ class BogglePlayer : public BaseBogglePlayer{
         void getCustomBoard(string** &new_board, unsigned int *rows, 
                             unsigned int *cols);
 
+        // Getter for the board graph
+        BogGraph getBoard();
     private:
         // Booleans to check if setBoard() and buildLexicon() were called
         bool boardIsSet;
         bool lexIsSet;
 
         // Graph for the board
-//        BogGraph boardGraph;
+        BogGraph boardGraph;
 
         // Lexicon search tree for the lexicon
 //        LST lexTree;

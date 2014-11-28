@@ -23,7 +23,38 @@
      */
     void BogglePlayer::setBoard(unsigned int rows, unsigned int cols, 
                                 string** diceArray){
-        return;
+
+        boardGraph.setCols(cols);
+        
+        // Adds dice to the BogGraph using the strings from diceArray
+        for(unsigned int r = 0; r < rows; r++){
+            for(unsigned int c = 0; c < cols; c++){
+                boardGraph.addVertex(r * cols + c, diceArray[r][c]);
+            }
+        }
+
+        // Creates Adj vector for each of the vertices
+        for(unsigned int r = 0; r < rows; r++){
+            for(unsigned int c = 0; c < cols; c++){
+                // Adds vertice one to the right
+                if(c < cols - 1){
+                    boardGraph.addEdge(r * cols + c, r * cols + (c + 1));
+                }
+                // Adds vertice one to the left
+                if(r < rows - 1){
+                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + c);
+                }
+                // Adds vertice diagonally in the southwest direction
+                if(c > 0 && r < rows - 1){
+                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c - 1));
+                }
+                // Adds vertice diagonally in the southeast direction
+                if(c < cols - 1 && r < rows - 1){
+                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
+                }
+            }
+        }
+        boardIsSet = true;
     }
 
     /**
@@ -49,11 +80,14 @@
      * If the string passed in is not on the board or if setBoard() was not
      * called, returns an empty vector.  Otherwise, finds the path to build
      * the word and returns a vector containing integer locations for each
-     * dice face.  Location integer: R * Width + C
+     * dice face.  Location integer: R * COLS + C
      */
     vector<int> BogglePlayer::isOnBoard(const string& word_to_check){
-        vector<int> bob;
-        return bob;
+        vector<int> locations;
+        if(boardIsSet == false){
+            return locations;
+        }
+        return locations;
     }
 
     /**
@@ -62,5 +96,10 @@
     void BogglePlayer::getCustomBoard(string** &new_board, unsigned int *rows, 
                         unsigned int *cols){
         return;
+    }
+
+    // Getter for the board graph
+    BogGraph BogglePlayer::getBoard(){
+        return boardGraph;
     }
 
