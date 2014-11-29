@@ -69,6 +69,7 @@ class BogglePlayer : public BaseBogglePlayer{
 
         // Getter for the board graph
         BogGraph getBoard();
+
     private:
         // Booleans to check if setBoard() and buildLexicon() were called
         bool boardIsSet;

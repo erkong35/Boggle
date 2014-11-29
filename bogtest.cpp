@@ -19,23 +19,46 @@ int main (int argc, char* argv[]) {
   string wordX("x");
   lex.insert(wordA);
   lex.insert("z");
-  string row0[] = {"D ","C ", "R ", "BOB"};
-  string row1[] = {"b ","A ", "Z ", "DUDE"};
-  string row2[] = {"DC ", "BB ", "CC ", "REKT "};
-  string row3[] = {"Lo ", "To ", "Bo ", "Pwnt "};
-  string* board[] = {row0,row1,row2,row3};
+  string row0[] = {"b","c", "d"};
+  string row1[] = {"g","m", "p"};
+  string row2[] = {"t", "r", "z"};
+  string* board[] = {row0,row1,row2};
   set<string> words;
   vector<int> locations;
 
 //  p->buildLexicon(lex);
-  p->setBoard(4,4,board);
-  for(int i = 0; i < 16; i++){    
+  p->setBoard(3,3,board);
+  for(int i = 0; i < 9; i++){    
      cout << "Key " << p->getBoard().getMap()[i]->getLetters() << ": ";
      for(BogVertex* hi : p->getBoard().getMap()[i]->getAdj()){
          cout << hi->getLetters() << " ";
      }
      cout << endl;
   }
+
+  if(p->isOnBoard("pd").size() > 0) {
+      cout << "NO" << endl;
+      for(int i : p->isOnBoard("pd")){
+          cout << i << " ";
+      }
+      cout << endl;
+  }
+
+  if(p->isOnBoard("bcd").size() > 0){
+      cout << "Yay" << endl;
+      for(int i : p->isOnBoard("bcd")){
+          cout << i << " ";
+      }
+      cout << endl;
+  }
+  if(p->isOnBoard("bcdpmgtrz").size() > 0){
+      cout << "Yay" << endl;
+      for(int i : p->isOnBoard("bcdpmgtrz")){
+          cout << i << " ";
+      }
+      cout << endl;
+  }
+
 /*  if(p->isInLexicon(wordX)) {
     std::cerr << "Apparent problem with isInLexicon #1." << std::endl;
     return -1;
