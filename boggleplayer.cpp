@@ -96,6 +96,10 @@
             return locations;
         }
 
+        // String that holds the word_to_check
+        string tmpWord = word_to_check; 
+        transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), ::tolower);
+
         // boolean keeping track of valid word being built
         bool valid = false;
 
@@ -109,7 +113,7 @@
         // word and pushes that dice to locations
         for(auto let : boardGraph.getMap()){
             compareStr = let.second->getLetters();
-            if(word_to_check.substr(0, compareStr.size()) == compareStr){
+            if(tmpWord.substr(0, compareStr.size()) == compareStr){
                 valid = true;
                 locations.push_back(let.first);
                 vertPosition = let.first; 
@@ -120,33 +124,38 @@
 
         // If the prefix for the word is not valid or if the word size is equal
         // to one of the dice face word sizes, return locations
-        if(!valid || word_to_check.size() == compareStr.size()){
+        if(!valid || tmpWord.size() == compareStr.size()){
             return locations;
         }
 
-        // String that holds the rest of the string
-        string tmpWord = word_to_check.substr(compareStr.size());
+        // Cuts off the first part that was already found
+        tmpWord = tmpWord.substr(compareStr.size());
 
         // Vertex to keep track of the board traversal
         BogVertex* vert = boardGraph.getMap()[vertPosition];
 
         // Boolean to check if word is done
         bool done = false;
-
         // Loops through adjacent vertices until word is built or word is 
         // found to not exist on the board
         while(valid && !done){
             for(BogVertex* adjVert : vert->getAdj()){
+                if(adjVert->wasVisited()){
+                    continue;
+                }
                 compareStr = adjVert->getLetters();
                 if(tmpWord.substr(0, compareStr.size()) == compareStr){
                     locations.push_back(adjVert->getPosition());
                     valid = true;
+                    // If the sizes are the same, this means the word
+                    // is found and completed
                     if(tmpWord.size() == compareStr.size()){
                         done = true;
                         break;
                     }
                     tmpWord = tmpWord.substr(compareStr.size());
                     vert = adjVert;
+                    vert->setVisited(true);
                     break;
                 }
                 else
@@ -156,8 +165,12 @@
             }
         }
 
-        if(!valid) return empty;
+        // Reset vertices to not visited for next call to isOnBoard
+        for(auto vert : boardGraph.getMap()){
+            vert.second->setVisited(false);
+        }
 
+        if(!valid) return empty;
         return locations;
     }
 

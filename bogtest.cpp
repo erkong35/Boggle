@@ -36,27 +36,13 @@ int main (int argc, char* argv[]) {
      cout << endl;
   }
 
-  if(p->isOnBoard("pd").size() > 0) {
-      cout << "NO" << endl;
-      for(int i : p->isOnBoard("pd")){
+  if(p->isOnBoard("bmzprm").size() > 0) {
+      for(int i : p->isOnBoard("bmzprm")){
           cout << i << " ";
       }
       cout << endl;
-  }
-
-  if(p->isOnBoard("bcd").size() > 0){
-      cout << "Yay" << endl;
-      for(int i : p->isOnBoard("bcd")){
-          cout << i << " ";
-      }
-      cout << endl;
-  }
-  if(p->isOnBoard("bcdpmgtrz").size() > 0){
-      cout << "Yay" << endl;
-      for(int i : p->isOnBoard("bcdpmgtrz")){
-          cout << i << " ";
-      }
-      cout << endl;
+  } else {
+      cout << "NO LIST" << endl;
   }
 
 /*  if(p->isInLexicon(wordX)) {
