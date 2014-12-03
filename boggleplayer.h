@@ -4,10 +4,6 @@
 #include "boggleutil.h"
 #include "baseboggleplayer.h"
 
-#include <set>
-#include <vector>
-#include <string>
-
 using namespace std;
 
 class BogglePlayer : public BaseBogglePlayer{
@@ -79,7 +75,7 @@ class BogglePlayer : public BaseBogglePlayer{
         BogGraph boardGraph;
 
         // Lexicon search tree for the lexicon
-//        LST lexTree;
+        LST lexTree;
 };
 
 #endif 

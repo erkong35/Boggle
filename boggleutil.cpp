@@ -37,6 +37,10 @@
      * Destructs a BogGraph
      */
     BogGraph::~BogGraph(){
+        for(auto vert: boardMap){
+            delete(vert.second);
+            vert.second = nullptr;
+        }
     }
 
     /**

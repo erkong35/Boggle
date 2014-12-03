@@ -11,7 +11,10 @@
      * lexicon created to true.
      */
     void BogglePlayer::buildLexicon(const set<string>& word_list){
-        return;
+/*        for(string s : word_list){
+            lexTree.insert(s);
+        } */
+        lexIsSet = true;
     }
 
     /**
@@ -69,7 +72,11 @@
      */ 
     bool BogglePlayer::getAllValidWords(unsigned int minimum_word_length, 
                           set<string>* words){
-        return false;
+        if(!lexIsSet || !boardIsSet){
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -77,7 +84,20 @@
      * not or if buildLexicon() was not called yet.
      */
     bool BogglePlayer::isInLexicon(const string& word_to_check){
-        return false;
+        if(!lexIsSet){
+            return false;
+        }
+
+/*        dict = lexTree.root;
+        for(char c : word_to_check){
+            if(dict.children[char] == NULL){
+                return false;
+            }
+            else {
+                dict = dict.children[char];
+            }
+        } */
+        return true;
     }
 
     /**

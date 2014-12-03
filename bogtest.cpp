@@ -36,8 +36,8 @@ int main (int argc, char* argv[]) {
      cout << endl;
   }
 
-  if(p->isOnBoard("bmzprm").size() > 0) {
-      for(int i : p->isOnBoard("bmzprm")){
+  if(p->isOnBoard("bcgrd").size() > 0) {
+      for(int i : p->isOnBoard("bgtmdpz")){
           cout << i << " ";
       }
       cout << endl;
