@@ -4,6 +4,10 @@
      * Destructs the object after game is over
      */
     BogglePlayer::~BogglePlayer(){
+        for(auto vert: boardGraph.getMap()){
+            delete(vert.second);
+            vert.second = nullptr;
+        }
     }
 
     /**

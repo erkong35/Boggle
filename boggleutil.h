@@ -52,11 +52,6 @@ class BogGraph{
         BogGraph() {}
 
         /**
-         * Destructs a BogGraph
-         */
-        ~BogGraph();
-
-        /**
          * Adds a vertex to the graph at the position provided and with the
          * string of letters provided.
          */

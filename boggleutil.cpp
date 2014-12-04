@@ -34,16 +34,6 @@
     
 
     /**
-     * Destructs a BogGraph
-     */
-    BogGraph::~BogGraph(){
-        for(auto vert: boardMap){
-            delete(vert.second);
-            vert.second = nullptr;
-        }
-    }
-
-    /**
      * Adds a vertex to the graph at the position provided and with the
      * string of letters provided.
      */
