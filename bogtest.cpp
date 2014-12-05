@@ -37,7 +37,7 @@ int main (int argc, char* argv[]) {
   }
 
   if(p->isOnBoard("pmg").size() > 0) {
-      for(int i : p->isOnBoard("ttcz")){
+      for(int i : p->isOnBoard("dpmcz")){
           cout << i << " ";
       }
       cout << endl;
