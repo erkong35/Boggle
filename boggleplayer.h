@@ -4,6 +4,8 @@
 #include "boggleutil.h"
 #include "baseboggleplayer.h"
 
+#include <stack>
+
 using namespace std;
 
 class BogglePlayer : public BaseBogglePlayer{

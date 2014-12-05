@@ -21,7 +21,7 @@ int main (int argc, char* argv[]) {
   lex.insert("z");
   string row0[] = {"b","c", "d"};
   string row1[] = {"g","m", "p"};
-  string row2[] = {"t", "r", "z"};
+  string row2[] = {"t", "c", "z"};
   string* board[] = {row0,row1,row2};
   set<string> words;
   vector<int> locations;
@@ -36,8 +36,8 @@ int main (int argc, char* argv[]) {
      cout << endl;
   }
 
-  if(p->isOnBoard("bcgrd").size() > 0) {
-      for(int i : p->isOnBoard("bgtmdpz")){
+  if(p->isOnBoard("pmg").size() > 0) {
+      for(int i : p->isOnBoard("ttcz")){
           cout << i << " ";
       }
       cout << endl;

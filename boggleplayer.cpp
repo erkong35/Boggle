@@ -131,7 +131,7 @@
         string compareStr;
 
         // position to keep track of the current vertice on the board
-        int vertPosition = 0;
+//        int vertPosition = 0;
 
         // Checks if any of the dice can be the first letter/letters of the
         // word and pushes that dice to locations
@@ -140,7 +140,7 @@
             if(tmpWord.substr(0, compareStr.size()) == compareStr){
                 valid = true;
                 locations.push_back(let.first);
-                vertPosition = let.first; 
+        //        vertPosition = let.first; 
                 let.second->setVisited(true);
                 break;
             }
@@ -156,30 +156,85 @@
         tmpWord = tmpWord.substr(compareStr.size());
 
         // Vertex to keep track of the board traversal
-        BogVertex* vert = boardGraph.getMap()[vertPosition];
+//        BogVertex* vert = boardGraph.getMap()[vertPosition];
 
-        // Boolean to check if word is done
-        bool done = false;
+        // int to keep track of position in the string
+        unsigned int pos = 0;
+
+        // Stack to do search through
+        stack<BogVertex*> vertStack;
+
+        for(auto vert : boardGraph.getMap()){
+            vertStack.push(vert.second);
+        }
+
+        // Vertex that keeps track of current vertice
+        BogVertex* vert;
+
+        while(!vertStack.empty()){
+            vert = vertStack.top();
+            vertStack.pop();
+            compareStr = vert->getLetters();
+            if(vert->wasRevisited()){
+                locations.pop_back();
+                vert->setRevisited(false);
+                vert->setVisited(false);
+                pos = pos - 1;
+            }
+            else if(!vert->wasVisited() && 
+                    vert->getLetters() == 
+                    tmpWord.substr(pos, compareStr.size())){
+                vert->setVisited(true);
+                pos = pos + 1;
+                valid = true;
+                locations.push_back(vert->getPosition());
+                // If the sizes are the same, this means the word
+                // is found and completed
+                if(pos == tmpWord.size()){
+                    break;
+                }
+                vert->setRevisited(true);
+                vertStack.push(vert);
+                for(BogVertex* adjVert : vert->getAdj()){
+                    if(!adjVert->wasVisited()){
+                        vertStack.push(adjVert);
+                    }
+                }
+            }
+            else {
+                valid = false;
+            }
+        }
+
+            
+
         // Loops through adjacent vertices until word is built or word is 
         // found to not exist on the board
-        while(valid && !done){
+/*        while(valid && !done){
             for(BogVertex* adjVert : vert->getAdj()){
+                if(adjVert->wasRevisited()){
+                    cout << " CHANGE" << endl;
+                    adjVert->setRevisited(false);
+                    adjVert->setVisited(false);
+                    pos = pos - 1;
+                }
                 if(adjVert->wasVisited()){
                     continue;
                 }
                 compareStr = adjVert->getLetters();
-                if(tmpWord.substr(0, compareStr.size()) == compareStr){
+                if(tmpWord.substr(pos, compareStr.size() + pos) == compareStr){
+                    pos = pos + 1;
                     locations.push_back(adjVert->getPosition());
                     valid = true;
                     // If the sizes are the same, this means the word
                     // is found and completed
-                    if(tmpWord.size() == compareStr.size()){
+                    if(pos == tmpWord.size()){
                         done = true;
                         break;
                     }
-                    tmpWord = tmpWord.substr(compareStr.size());
+                    adjVert->setVisited(true);
+                    adjVert->setRevisited(true);
                     vert = adjVert;
-                    vert->setVisited(true);
                     break;
                 }
                 else
@@ -187,11 +242,12 @@
                     valid = false;
                 }
             }
-        }
+        }*/
 
         // Reset vertices to not visited for next call to isOnBoard
         for(auto vert : boardGraph.getMap()){
             vert.second->setVisited(false);
+            vert.second->setRevisited(false);
         }
 
         if(!valid) return empty;

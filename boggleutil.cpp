@@ -31,7 +31,14 @@
     void BogVertex::setAdj(BogVertex* vert){
         adj.push_back(vert);
     }
-    
+
+    // Getter and setter for the revisit boolean
+    bool BogVertex::wasRevisited(){
+        return revisit;
+    }
+    void BogVertex::setRevisited(bool revisited){
+        revisit = revisited;
+    }
 
     /**
      * Adds a vertex to the graph at the position provided and with the

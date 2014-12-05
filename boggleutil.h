@@ -29,9 +29,13 @@ class BogVertex{
         bool wasVisited();
         void setVisited(bool visited);
         
-        // Getter for the adjcaceny vector
+        // Getter and setter for the adjcaceny vector
         vector<BogVertex*> getAdj();
         void setAdj(BogVertex* vert);
+
+        // Getter and setter for the revisit boolean
+        bool wasRevisited();
+        void setRevisited(bool revisited);
     private:
         // Adjaceny vector for the vertex
         vector<BogVertex*> adj;
@@ -41,6 +45,7 @@ class BogVertex{
         string letters;
         int position;
         bool visited;
+        bool revisit;
 
 };
 
