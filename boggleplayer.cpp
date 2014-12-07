@@ -69,7 +69,8 @@
                 }
                 // Adds vertice diagonally in the southeast direction
                     if(c < cols - 1 && r < rows - 1){
-                        boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
+                        boardGraph.addEdge(r * cols + c, (r + 1) * cols 
+                                                         + (c + 1));
                     }
                 }
             }
@@ -100,8 +101,11 @@
                 return false;
             }
 
+            string tmp = word_to_check;
+            transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+
             LSTNode* curr  = lexTree.getRoot();
-            for(char c : word_to_check){
+            for(char c : tmp){
                 if(curr->getChildren()[c] == nullptr){
                     return false;
                 }
@@ -109,7 +113,7 @@
                     curr = curr->getChildren()[c];
                 }
             } 
-            return true;
+            return curr->isEndWord();
         }
 
         /**
@@ -130,7 +134,8 @@
 
             // String that holds the word_to_check
             string tmpWord = word_to_check; 
-            transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), ::tolower);
+            transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), 
+                      ::tolower);
 
             // boolean keeping track of valid word being built
             bool valid = false;
@@ -138,39 +143,38 @@
             // string taken from dice face to compare to the word given
             string compareStr;
 
-            // position to keep track of the current vertice on the board
-    //        int vertPosition = 0;
-
             // Checks if any of the dice can be the first letter/letters of the
             // word and pushes that dice to locations
-            for(auto let : boardGraph.getMap()){
+           /* for(auto let : boardGraph.getMap()){
                 compareStr = let.second->getLetters();
             if(tmpWord.substr(0, compareStr.size()) == compareStr){
                 valid = true;
                 locations.push_back(let.first);
-        //        vertPosition = let.first; 
                 let.second->setVisited(true);
                 break;
             }
-        }
+        }*/
 
         // If the prefix for the word is not valid or if the word size is equal
         // to one of the dice face word sizes, return locations
-        if(!valid || tmpWord.size() == compareStr.size()){
-            return locations;
-        }
+      //  if(!valid || tmpWord.size() == compareStr.size()){
+      //      return locations;
+      //  }
 
         // Cuts off the first part that was already found
-        tmpWord = tmpWord.substr(compareStr.size());
-
-        // Vertex to keep track of the board traversal
-//        BogVertex* vert = boardGraph.getMap()[vertPosition];
+      //  tmpWord = tmpWord.substr(compareStr.size());
 
         // int to keep track of position in the string
         unsigned int pos = 0;
 
         // Stack to do search through
         stack<BogVertex*> vertStack;
+
+        // Reset vertices to not visited for next call to isOnBoard
+        for(auto vert : boardGraph.getMap()){
+            vert.second->setVisited(false);
+            vert.second->setRevisited(false);
+        }
 
         for(auto vert : boardGraph.getMap()){
             vertStack.push(vert.second);
@@ -189,9 +193,22 @@
                 vert->setVisited(false);
                 pos = pos - 1;
             }
-            else if(!vert->wasVisited() && 
+            else if(!vert->wasVisited() && pos >= 0 &&
+                    pos <= tmpWord.size() &&
                     vert->getLetters() == 
-                    tmpWord.substr(pos, compareStr.size())){
+                    tmpWord.substr(pos, compareStr.size()) ){
+                // Check if the letter found is not adjacent to the most
+                // recently added location.  If it is not adj, then the loop
+                // ends and word is not found on board.
+                if(locations.size() > 0){
+                    vector<BogVertex*> adj = boardGraph.getMap()
+                                             [locations.back()]->getAdj();
+                    if(find(adj.begin(), adj.end(), vert) == adj.end()){
+                        valid = false;
+                        break;
+                    }
+                }
+
                 vert->setVisited(true);
                 pos = pos + 1;
                 valid = true;
@@ -214,50 +231,6 @@
             }
         }
 
-            
-
-        // Loops through adjacent vertices until word is built or word is 
-        // found to not exist on the board
-/*        while(valid && !done){
-            for(BogVertex* adjVert : vert->getAdj()){
-                if(adjVert->wasRevisited()){
-                    cout << " CHANGE" << endl;
-                    adjVert->setRevisited(false);
-                    adjVert->setVisited(false);
-                    pos = pos - 1;
-                }
-                if(adjVert->wasVisited()){
-                    continue;
-                }
-                compareStr = adjVert->getLetters();
-                if(tmpWord.substr(pos, compareStr.size() + pos) == compareStr){
-                    pos = pos + 1;
-                    locations.push_back(adjVert->getPosition());
-                    valid = true;
-                    // If the sizes are the same, this means the word
-                    // is found and completed
-                    if(pos == tmpWord.size()){
-                        done = true;
-                        break;
-                    }
-                    adjVert->setVisited(true);
-                    adjVert->setRevisited(true);
-                    vert = adjVert;
-                    break;
-                }
-                else
-                {
-                    valid = false;
-                }
-            }
-        }*/
-
-        // Reset vertices to not visited for next call to isOnBoard
-        for(auto vert : boardGraph.getMap()){
-            vert.second->setVisited(false);
-            vert.second->setRevisited(false);
-        }
-
         if(!valid) return empty;
         return locations;
     }
@@ -274,4 +247,10 @@
     BogGraph BogglePlayer::getBoard(){
         return boardGraph;
     }
+
+    // Getter for the Lexicon trie
+    LST BogglePlayer::getLex(){
+        return lexTree;
+    }
+
 

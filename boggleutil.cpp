@@ -80,6 +80,10 @@
         return children;
     }
 
+    void LSTNode::setChildren(char c, LSTNode* child){
+        children[c] = child;
+    }
+
     bool LSTNode::isEndWord(){
         return isEnd; 
     }
@@ -89,7 +93,7 @@
     }
 
     void LST::addChild(LSTNode* parent, char c){
-        parent->getChildren()[c] = new LSTNode(); 
+        parent->setChildren(c , new LSTNode()); 
     }
 
     LSTNode* LST::getRoot(){

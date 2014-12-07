@@ -92,19 +92,20 @@ class LSTNode{
             }
         }
         unordered_map<char, LSTNode*> getChildren();
+        void setChildren(char c, LSTNode* child);
         bool isEndWord();
         void setEndWord(); 
     private:
         unordered_map<char, LSTNode*> children;
         bool isEnd;
 };
+
 class LST{
     public:
         LST(){
             root = new LSTNode();
         }
         void addChild(LSTNode* parent, char c);
-        void insert();
         LSTNode* getRoot();
     private:
         LSTNode* root;
