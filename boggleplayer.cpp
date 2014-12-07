@@ -15,9 +15,17 @@
      * lexicon created to true.
      */
     void BogglePlayer::buildLexicon(const set<string>& word_list){
-/*        for(string s : word_list){
-            lexTree.insert(s);
-        } */
+        LSTNode* parent;
+        for(string s : word_list){
+            parent = lexTree.getRoot();
+            for(char c : s){
+                if(parent->getChildren()[c] == nullptr){
+                    lexTree.addChild(parent, c);
+                }
+                parent = parent->getChildren()[c];
+            }
+            parent->setEndWord();
+        }
         lexIsSet = true;
     }
 
@@ -60,83 +68,83 @@
                     boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c - 1));
                 }
                 // Adds vertice diagonally in the southeast direction
-                if(c < cols - 1 && r < rows - 1){
-                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
+                    if(c < cols - 1 && r < rows - 1){
+                        boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
+                    }
                 }
             }
-        }
-        boardIsSet = true;
-    }
-
-    /**
-     * Returns false if setBoard() or buildLexicon() has not been called;
-     * else return true.  Fills up the set "words" with all words that
-     * are of at least the minimum length, are in the lexicon, and can be
-     * found using an acylic path on the board.
-     */ 
-    bool BogglePlayer::getAllValidWords(unsigned int minimum_word_length, 
-                          set<string>* words){
-        if(!lexIsSet || !boardIsSet){
-            return false;
-        }
-        
-        return true;
-    }
-
-    /**
-     * Returns true if the given word is in the lexicon, false if it is
-     * not or if buildLexicon() was not called yet.
-     */
-    bool BogglePlayer::isInLexicon(const string& word_to_check){
-        if(!lexIsSet){
-            return false;
+            boardIsSet = true;
         }
 
-/*        dict = lexTree.root;
-        for(char c : word_to_check){
-            if(dict.children[char] == NULL){
+        /**
+         * Returns false if setBoard() or buildLexicon() has not been called;
+         * else return true.  Fills up the set "words" with all words that
+         * are of at least the minimum length, are in the lexicon, and can be
+         * found using an acylic path on the board.
+         */ 
+        bool BogglePlayer::getAllValidWords(unsigned int minimum_word_length, 
+                              set<string>* words){
+            if(!lexIsSet || !boardIsSet){
                 return false;
             }
-            else {
-                dict = dict.children[char];
-            }
-        } */
-        return true;
-    }
-
-    /**
-     * If the string passed in is not on the board or if setBoard() was not
-     * called, returns an empty vector.  Otherwise, finds the path to build
-     * the word and returns a vector containing integer locations for each
-     * dice face.  Location integer: R * COLS + C
-     */
-    vector<int> BogglePlayer::isOnBoard(const string& word_to_check){
-
-        // Empty vector
-        vector<int> empty;
-        // Vector to store locations
-        vector<int> locations;
-        if(!boardIsSet){
-            return locations;
+            
+            return true;
         }
 
-        // String that holds the word_to_check
-        string tmpWord = word_to_check; 
-        transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), ::tolower);
+        /**
+         * Returns true if the given word is in the lexicon, false if it is
+         * not or if buildLexicon() was not called yet.
+         */
+        bool BogglePlayer::isInLexicon(const string& word_to_check){
+            if(!lexIsSet){
+                return false;
+            }
 
-        // boolean keeping track of valid word being built
-        bool valid = false;
+            LSTNode* curr  = lexTree.getRoot();
+            for(char c : word_to_check){
+                if(curr->getChildren()[c] == nullptr){
+                    return false;
+                }
+                else {
+                    curr = curr->getChildren()[c];
+                }
+            } 
+            return true;
+        }
 
-        // string taken from dice face to compare to the word given
-        string compareStr;
+        /**
+         * If the string passed in is not on the board or if setBoard() was not
+         * called, returns an empty vector.  Otherwise, finds the path to build
+         * the word and returns a vector containing integer locations for each
+         * dice face.  Location integer: R * COLS + C
+         */
+        vector<int> BogglePlayer::isOnBoard(const string& word_to_check){
 
-        // position to keep track of the current vertice on the board
-//        int vertPosition = 0;
+            // Empty vector
+            vector<int> empty;
+            // Vector to store locations
+            vector<int> locations;
+            if(!boardIsSet){
+                return locations;
+            }
 
-        // Checks if any of the dice can be the first letter/letters of the
-        // word and pushes that dice to locations
-        for(auto let : boardGraph.getMap()){
-            compareStr = let.second->getLetters();
+            // String that holds the word_to_check
+            string tmpWord = word_to_check; 
+            transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), ::tolower);
+
+            // boolean keeping track of valid word being built
+            bool valid = false;
+
+            // string taken from dice face to compare to the word given
+            string compareStr;
+
+            // position to keep track of the current vertice on the board
+    //        int vertPosition = 0;
+
+            // Checks if any of the dice can be the first letter/letters of the
+            // word and pushes that dice to locations
+            for(auto let : boardGraph.getMap()){
+                compareStr = let.second->getLetters();
             if(tmpWord.substr(0, compareStr.size()) == compareStr){
                 valid = true;
                 locations.push_back(let.first);

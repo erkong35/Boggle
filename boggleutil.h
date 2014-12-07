@@ -4,6 +4,9 @@
 #include <map>
 #include <iostream>
 #include <algorithm>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unordered_map>
 
 using namespace std;
 
@@ -81,7 +84,29 @@ class BogGraph{
         int numCols;
 };
 
+class LSTNode{
+    public:
+        LSTNode(){
+            for(char c = 'a'; c <='z'; c++){
+                children[c] = nullptr;
+            }
+        }
+        unordered_map<char, LSTNode*> getChildren();
+        bool isEndWord();
+        void setEndWord(); 
+    private:
+        unordered_map<char, LSTNode*> children;
+        bool isEnd;
+};
 class LST{
-
+    public:
+        LST(){
+            root = new LSTNode();
+        }
+        void addChild(LSTNode* parent, char c);
+        void insert();
+        LSTNode* getRoot();
+    private:
+        LSTNode* root;
 };
 #endif

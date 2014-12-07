@@ -75,3 +75,23 @@
     map <int, BogVertex*> BogGraph::getMap(){
         return boardMap;
     }
+
+    unordered_map<char, LSTNode*> LSTNode::getChildren(){
+        return children;
+    }
+
+    bool LSTNode::isEndWord(){
+        return isEnd; 
+    }
+
+    void LSTNode::setEndWord(){
+        isEnd = true;
+    }
+
+    void LST::addChild(LSTNode* parent, char c){
+        parent->getChildren()[c] = new LSTNode(); 
+    }
+
+    LSTNode* LST::getRoot(){
+        return root;
+    }
