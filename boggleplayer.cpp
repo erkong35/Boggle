@@ -4,7 +4,11 @@
      * Destructs the object after game is over
      */
     BogglePlayer::~BogglePlayer(){
-        for(auto vert: boardGraph.getMap()){
+        for(auto node : lexTree.getAllNodes()){
+            delete(node.second);
+            node.second = nullptr;
+        }
+        for(auto vert : boardGraph.getMap()){
             delete(vert.second);
             vert.second = nullptr;
         }

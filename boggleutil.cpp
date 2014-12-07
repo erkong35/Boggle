@@ -94,8 +94,14 @@
 
     void LST::addChild(LSTNode* parent, char c){
         parent->setChildren(c , new LSTNode()); 
+        allNodes[pos] = parent->getChildren()[c];
+        pos = pos + 1;
     }
 
     LSTNode* LST::getRoot(){
         return root;
+    }
+
+    unordered_map<int, LSTNode*> LST::getAllNodes(){
+        return allNodes;
     }

@@ -104,10 +104,15 @@ class LST{
     public:
         LST(){
             root = new LSTNode();
+            allNodes[pos] = root;
+            pos = pos + 1;
         }
         void addChild(LSTNode* parent, char c);
         LSTNode* getRoot();
+        unordered_map<int, LSTNode*> getAllNodes();
     private:
+        unordered_map<int, LSTNode*> allNodes;
         LSTNode* root;
+        unsigned int pos = 0;
 };
 #endif

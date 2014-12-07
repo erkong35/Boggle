@@ -47,7 +47,6 @@ int main (int argc, char* argv[]) {
   while(infile.is_open() && infile.good()){
       getline(infile, word);
       if(p->isInLexicon(word)) {
-          cout << "IS IN" << endl;
       }
       else {
           cout << " IS NOT IN " << endl;
