@@ -86,33 +86,62 @@ class BogGraph{
 
 class LSTNode{
     public:
+        /**
+         * Constructs an LSTNode that holds the characters a-z.  Initially
+         * sets all values of children to null pointers.
+         */
         LSTNode(){
             for(char c = 'a'; c <='z'; c++){
                 children[c] = nullptr;
             }
         }
+
+        // Getter and setter for children of a LSTNode
         unordered_map<char, LSTNode*> getChildren();
         void setChildren(char c, LSTNode* child);
+
+        // Getter and setter for the boolean that checks for end of a word
         bool isEndWord();
         void setEndWord(); 
     private:
+        // Unordered map of the children of this node
         unordered_map<char, LSTNode*> children;
+
+        // True if this node is the end of a word
         bool isEnd;
 };
 
 class LST{
     public:
+        /**
+         * Constructs a LST with one root node.  This node is added to the
+         * map that holds all the nodes.
+         */
         LST(){
             root = new LSTNode();
             allNodes[pos] = root;
             pos = pos + 1;
         }
+
+        /**
+         * Adds a child to the specified parent node at the specified 
+         * character c.  Also adds to the map of all nodes in the tree.
+         */
         void addChild(LSTNode* parent, char c);
+
+        // Getter for the root of the tree
         LSTNode* getRoot();
+
+        // Getter for all the nodes in the tree
         unordered_map<int, LSTNode*> getAllNodes();
     private:
+        // Map containing all the nodes in the tree
         unordered_map<int, LSTNode*> allNodes;
+
+        // Root of the tree
         LSTNode* root;
+
+        // Holds current position for the map
         unsigned int pos = 0;
 };
 #endif

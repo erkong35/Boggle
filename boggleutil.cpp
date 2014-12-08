@@ -76,32 +76,38 @@
         return boardMap;
     }
 
+    // Getter and setter for children of a LSTNode
     unordered_map<char, LSTNode*> LSTNode::getChildren(){
         return children;
     }
-
     void LSTNode::setChildren(char c, LSTNode* child){
         children[c] = child;
     }
 
+    // Getter and setter for the boolean that checks for end of a word
     bool LSTNode::isEndWord(){
         return isEnd; 
     }
-
     void LSTNode::setEndWord(){
         isEnd = true;
     }
 
+    /**
+     * Adds a child to the specified parent node at the specified 
+     * character c.  Also adds to the map of all nodes in the tree.
+     */
     void LST::addChild(LSTNode* parent, char c){
         parent->setChildren(c , new LSTNode()); 
         allNodes[pos] = parent->getChildren()[c];
         pos = pos + 1;
     }
 
+    // Getter for the root of the tree
     LSTNode* LST::getRoot(){
         return root;
     }
 
+    // Getter for all the nodes in the tree
     unordered_map<int, LSTNode*> LST::getAllNodes(){
         return allNodes;
     }

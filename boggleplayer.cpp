@@ -20,14 +20,18 @@
      */
     void BogglePlayer::buildLexicon(const set<string>& word_list){
         LSTNode* parent;
+        // Creates new children for each character in string 
         for(string s : word_list){
             parent = lexTree.getRoot();
             for(char c : s){
+                // Adds child at character if child not already there
                 if(parent->getChildren()[c] == nullptr){
                     lexTree.addChild(parent, c);
                 }
                 parent = parent->getChildren()[c];
             }
+            // End of the string is a word, so set the last node's boolean to 
+            // mark end of word
             parent->setEndWord();
         }
         lexIsSet = true;
@@ -72,101 +76,85 @@
                     boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c - 1));
                 }
                 // Adds vertice diagonally in the southeast direction
-                    if(c < cols - 1 && r < rows - 1){
-                        boardGraph.addEdge(r * cols + c, (r + 1) * cols 
-                                                         + (c + 1));
-                    }
+                if(c < cols - 1 && r < rows - 1){
+                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
                 }
             }
-            boardIsSet = true;
+        }
+        boardIsSet = true;
+    }
+
+    /**
+     * Returns false if setBoard() or buildLexicon() has not been called;
+     * else return true.  Fills up the set "words" with all words that
+     * are of at least the minimum length, are in the lexicon, and can be
+     * found using an acylic path on the board.
+     */ 
+    bool BogglePlayer::getAllValidWords(unsigned int minimum_word_length, 
+                                        set<string>* words){
+        if(!lexIsSet || !boardIsSet){
+            return false;
         }
 
-        /**
-         * Returns false if setBoard() or buildLexicon() has not been called;
-         * else return true.  Fills up the set "words" with all words that
-         * are of at least the minimum length, are in the lexicon, and can be
-         * found using an acylic path on the board.
-         */ 
-        bool BogglePlayer::getAllValidWords(unsigned int minimum_word_length, 
-                              set<string>* words){
-            if(!lexIsSet || !boardIsSet){
+
+        
+        return true;
+    }
+
+    /**
+     * Returns true if the given word is in the lexicon, false if it is
+     * not or if buildLexicon() was not called yet.
+     */
+    bool BogglePlayer::isInLexicon(const string& word_to_check){
+        if(!lexIsSet){
+            return false;
+        }
+
+        string tmp = word_to_check;
+        transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+
+        // Traverse the lexicon, comparing characters as it goes
+        // If character is not found, return false, else keep traversing
+        LSTNode* curr  = lexTree.getRoot();
+        for(char c : tmp){
+            if(curr->getChildren()[c] == nullptr){
                 return false;
             }
-            
-            return true;
+            else {
+                curr = curr->getChildren()[c];
+            }
+        } 
+
+        // Return true if ends on a word
+        return curr->isEndWord();
+    }
+
+    /**
+     * If the string passed in is not on the board or if setBoard() was not
+     * called, returns an empty vector.  Otherwise, finds the path to build
+     * the word and returns a vector containing integer locations for each
+     * dice face.  Location integer: R * COLS + C
+     */
+    vector<int> BogglePlayer::isOnBoard(const string& word_to_check){
+
+        // Empty vector
+        vector<int> empty;
+
+        // Vector to store locations
+        vector<int> locations;
+        if(!boardIsSet){
+            return locations;
         }
 
-        /**
-         * Returns true if the given word is in the lexicon, false if it is
-         * not or if buildLexicon() was not called yet.
-         */
-        bool BogglePlayer::isInLexicon(const string& word_to_check){
-            if(!lexIsSet){
-                return false;
-            }
+        // String that holds the word_to_check
+        string tmpWord = word_to_check; 
+        transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), ::tolower);
 
-            string tmp = word_to_check;
-            transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+        // boolean keeping track of valid word being built
+        bool valid = false;
 
-            LSTNode* curr  = lexTree.getRoot();
-            for(char c : tmp){
-                if(curr->getChildren()[c] == nullptr){
-                    return false;
-                }
-                else {
-                    curr = curr->getChildren()[c];
-                }
-            } 
-            return curr->isEndWord();
-        }
-
-        /**
-         * If the string passed in is not on the board or if setBoard() was not
-         * called, returns an empty vector.  Otherwise, finds the path to build
-         * the word and returns a vector containing integer locations for each
-         * dice face.  Location integer: R * COLS + C
-         */
-        vector<int> BogglePlayer::isOnBoard(const string& word_to_check){
-
-            // Empty vector
-            vector<int> empty;
-            // Vector to store locations
-            vector<int> locations;
-            if(!boardIsSet){
-                return locations;
-            }
-
-            // String that holds the word_to_check
-            string tmpWord = word_to_check; 
-            transform(tmpWord.begin(), tmpWord.end(), tmpWord.begin(), 
-                      ::tolower);
-
-            // boolean keeping track of valid word being built
-            bool valid = false;
-
-            // string taken from dice face to compare to the word given
-            string compareStr;
-
-            // Checks if any of the dice can be the first letter/letters of the
-            // word and pushes that dice to locations
-           /* for(auto let : boardGraph.getMap()){
-                compareStr = let.second->getLetters();
-            if(tmpWord.substr(0, compareStr.size()) == compareStr){
-                valid = true;
-                locations.push_back(let.first);
-                let.second->setVisited(true);
-                break;
-            }
-        }*/
-
-        // If the prefix for the word is not valid or if the word size is equal
-        // to one of the dice face word sizes, return locations
-      //  if(!valid || tmpWord.size() == compareStr.size()){
-      //      return locations;
-      //  }
-
-        // Cuts off the first part that was already found
-      //  tmpWord = tmpWord.substr(compareStr.size());
+        // string taken from dice face to compare to the word given
+        string compareStr;
 
         // int to keep track of position in the string
         unsigned int pos = 0;
@@ -187,6 +175,7 @@
         // Vertex that keeps track of current vertice
         BogVertex* vert;
 
+        // Traverse the stack to find the locations to make a word
         while(!vertStack.empty()){
             vert = vertStack.top();
             vertStack.pop();
@@ -197,8 +186,7 @@
                 vert->setVisited(false);
                 pos = pos - 1;
             }
-            else if(!vert->wasVisited() && pos >= 0 &&
-                    pos <= tmpWord.size() &&
+            else if(!vert->wasVisited() && pos <= tmpWord.size() &&
                     vert->getLetters() == 
                     tmpWord.substr(pos, compareStr.size()) ){
                 // Check if the letter found is not adjacent to the most
@@ -234,7 +222,8 @@
                 valid = false;
             }
         }
-
+        
+        // If invalid return the empty vector
         if(!valid) return empty;
         return locations;
     }
@@ -243,7 +232,7 @@
      * Creates a custom board for testing.
      */
     void BogglePlayer::getCustomBoard(string** &new_board, unsigned int *rows, 
-                        unsigned int *cols){
+                                      unsigned int *cols){
         return;
     }
 
