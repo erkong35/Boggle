@@ -111,3 +111,17 @@
     unordered_map<int, LSTNode*> LST::getAllNodes(){
         return allNodes;
     }
+
+    // Checks if string is prefix
+    bool LST::isPrefix(string pref){
+        LSTNode* curr = root;
+        for(char c : pref){
+            if(curr->getChildren()[c] == nullptr){
+                return false;
+            }
+            else {
+                curr = curr->getChildren()[c];
+            }
+        }
+        return true;
+    }

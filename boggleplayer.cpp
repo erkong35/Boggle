@@ -96,9 +96,54 @@
             return false;
         }
 
-
+        for(auto vert : boardGraph.getMap()){
+            getWords(minimum_word_length, words, vert.second->getLetters(),
+                     lexTree.getRoot(), vert.second);
+        }
         
         return true;
+    }
+
+    void BogglePlayer::getWords(unsigned int minimum_word_length,
+                                set<string>* words, string prefix, 
+                                LSTNode* node, BogVertex* vert){
+        bool flag = true;
+        if(lexTree.isPrefix(prefix) && 
+           isInLexicon(prefix) &&
+           prefix.size() >= minimum_word_length){
+            cout << "HERE" << endl;
+            words->insert(prefix);
+        }
+
+        vert->setVisited(true);
+
+        if(isInLexicon(prefix)){
+            vert->setVisited(false);
+        } 
+        else {
+            if(lexTree.isPrefix(prefix)){
+                for(BogVertex* adj : vert->getAdj()){
+                    if(!adj->wasVisited()){
+                        LSTNode* next;
+                        for(char c : adj->getLetters()){
+                            next = node->getChildren()[c];
+                            prefix += c;
+
+                            if(!lexTree.isPrefix(prefix)){
+                                vert->setVisited(false);
+                                flag = false;
+                            }
+                        }
+
+                        if(flag){
+                        getWords(minimum_word_length, words, prefix, next,
+                                 adj);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     /**

@@ -134,6 +134,9 @@ class LST{
 
         // Getter for all the nodes in the tree
         unordered_map<int, LSTNode*> getAllNodes();
+
+        // Checks if string is prefix
+        bool isPrefix(string pref);
     private:
         // Map containing all the nodes in the tree
         unordered_map<int, LSTNode*> allNodes;

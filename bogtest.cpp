@@ -23,12 +23,183 @@ int main (int argc, char* argv[]) {
 //  lex.insert("abc");
 //  lex.insert("ab");
 //  lex.insert("z");
-  string row0[] = {"b","c", "d"};
-  string row1[] = {"g","m", "p"};
-  string row2[] = {"t", "c", "z"};
-  string* board[] = {row0,row1,row2};
-  set<string> words;
-  vector<int> locations;
+//  string row0[] = {"b","c", "d"};
+//  string row1[] = {"g","m", "p"};
+//  string row2[] = {"t", "c", "z"};
+//  string* board[] = {row0,row1,row2};
+//  set<string> words;
+//  vector<int> locations;
+string row0[] = {"T","H","L","I"};
+string row1[] = {"R","E","A","D"};
+string row2[] = {"I","L","M","O"};
+string row3[] = {"F","P","S","N"};
+string* board[] = {row0,row1,row2,row3};
+ 
+ set<string> words;
+ vector<int> locations;
+ p->buildLexicon(lex);
+ p->setBoard(4,4,board);    //<-------this is important
+ std::vector<int>checkVector;
+ checkVector = p->isOnBoard("TRIP");
+ if(checkVector.size()==4)
+ {
+     std::cout << "TRIP found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("mad");
+ if(checkVector.size()==3)
+ {
+     std::cout << "mad found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("Help");
+ if(checkVector.size()==4)
+ {
+     std::cout << "Help found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("lamE");
+ if(checkVector.size()==4)
+ {
+     std::cout << "lamE found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("dOmE");
+ if(checkVector.size()==4)
+ {
+     std::cout << "dOmE found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("FiRe");
+ if(checkVector.size()==4)
+ {
+     std::cout << "FiRe found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("flip");
+ if(checkVector.size()==4)
+ {
+     std::cout << "flip found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("real");
+ if(checkVector.size()==4)
+ {
+     std::cout << "real found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("ream");
+ if(checkVector.size()==4)
+ {
+     std::cout << "ream found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("HEAL");
+ if(checkVector.size()==4)
+ {
+     std::cout << "HEAL at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("had");
+ if(checkVector.size()==3)
+ {
+     std::cout << "had found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("hAm");
+ if(checkVector.size()==3)
+ {
+     std::cout << "hAm found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("son");
+ if(checkVector.size()==3)
+ {
+     std::cout << "son found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("LID");
+ if(checkVector.size()==3)
+ {
+     std::cout << "LID found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("dame");
+ if(checkVector.size()==4)
+ {
+     std::cout << "dame found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
+ checkVector = p->isOnBoard("Team");
+ if(checkVector.size()==4)
+ {
+     std::cout << "Team found at: ";
+     for(unsigned int i = 0; i < checkVector.size(); i++)
+     {
+         std::cout<<checkVector.at(i)<<" ";
+     }
+     std::cout<<"\n";
+ };
 
   string word;
   ifstream infile;
@@ -52,7 +223,7 @@ int main (int argc, char* argv[]) {
           cout << " IS NOT IN " << endl;
       }
   }
-  p->setBoard(3,3,board);
+/*  p->setBoard(3,3,board);
   for(int i = 0; i < 9; i++){    
      cout << "Key " << p->getBoard().getMap()[i]->getLetters() << ": ";
      for(BogVertex* hi : p->getBoard().getMap()[i]->getAdj()){
@@ -70,7 +241,7 @@ int main (int argc, char* argv[]) {
       cout << "NO LIST" << endl;
   }
 
-/*  if(p->isInLexicon(wordX)) {
+  if(p->isInLexicon(wordX)) {
     std::cerr << "Apparent problem with isInLexicon #1." << std::endl;
     return -1;
   }
