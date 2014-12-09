@@ -103,6 +103,10 @@ class LSTNode{
         // Getter and setter for the boolean that checks for end of a word
         bool isEndWord();
         void setEndWord(); 
+
+        // Returns true if the word is not a prefix for anymore words
+        bool noMoreWords();
+
     private:
         // Unordered map of the children of this node
         unordered_map<char, LSTNode*> children;

@@ -92,6 +92,11 @@
         isEnd = true;
     }
 
+    // Returns true if the word is not a prefix for anymore words
+    bool LSTNode::noMoreWords(){
+        return children.empty();
+    }
+
     /**
      * Adds a child to the specified parent node at the specified 
      * character c.  Also adds to the map of all nodes in the tree.

@@ -45,8 +45,8 @@ class BogglePlayer : public BaseBogglePlayer{
         bool getAllValidWords(unsigned int minimum_word_length, 
                               set<string>* words);
 
-        void getWords(unsigned int minimum_word_length, set<string>* words,
-                      string prefix, LSTNode* node, BogVertex* vert);
+        void getWords(BogVertex* currVert, string prefix, 
+                      unsigned int minimum_word_length, set<string>* words);
 
         /**
          * Returns true if the given word is in the lexicon, false if it is

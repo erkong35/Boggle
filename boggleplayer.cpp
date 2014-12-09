@@ -96,54 +96,111 @@
             return false;
         }
 
+        // Keep track of current node
+        LSTNode* curr;
         for(auto vert : boardGraph.getMap()){
-            getWords(minimum_word_length, words, vert.second->getLetters(),
-                     lexTree.getRoot(), vert.second);
+            curr = lexTree.getRoot();
+
+            // If the word on the dice face is not a prefix, go to next die
+            if(!lexTree.isPrefix(vert.second->getLetters())){
+                continue;
+            } 
+
+            // Go down the tree to the correct node
+            for(char c : vert.second->getLetters()){
+                curr = curr->getChildren()[c];
+            }
+
+            // No more possible words can be formed from this 
+            if(curr->noMoreWords() && curr->isEndWord()){
+                if(vert.second->getLetters().size() >= minimum_word_length){
+                    words->insert(vert.second->getLetters());
+                }
+                continue;
+            }
+            else {
+                vert.second->setVisited(true);
+                if(curr != 0 && curr->isEndWord() &&
+                   vert.second->getLetters().size() >= minimum_word_length){
+                    words->insert(vert.second->getLetters());
+                }
+                getWords(vert.second, vert.second->getLetters(), 
+                         minimum_word_length, words);
+                vert.second->setVisited(false);
+            }
         }
         
         return true;
     }
 
-    void BogglePlayer::getWords(unsigned int minimum_word_length,
-                                set<string>* words, string prefix, 
-                                LSTNode* node, BogVertex* vert){
-        bool flag = true;
-        if(lexTree.isPrefix(prefix) && 
-           isInLexicon(prefix) &&
-           prefix.size() >= minimum_word_length){
-            cout << "HERE" << endl;
-            words->insert(prefix);
-        }
+    void BogglePlayer::getWords(BogVertex* currVert, string prefix, 
+                                unsigned int minimum_word_length,
+                                set<string>* words){ 
 
-        vert->setVisited(true);
+        // Holds original prefix
+        string origPref = prefix;
 
-        if(isInLexicon(prefix)){
-            vert->setVisited(false);
-        } 
-        else {
-            if(lexTree.isPrefix(prefix)){
-                for(BogVertex* adj : vert->getAdj()){
-                    if(!adj->wasVisited()){
-                        LSTNode* next;
-                        for(char c : adj->getLetters()){
-                            next = node->getChildren()[c];
-                            prefix += c;
+        // Vertex to keep track as adjaceny stack is searched through
+        BogVertex* curr;
 
-                            if(!lexTree.isPrefix(prefix)){
-                                vert->setVisited(false);
-                                flag = false;
-                            }
-                        }
+        // Node to keep track of curr node
+        LSTNode* currNode;
 
-                        if(flag){
-                        getWords(minimum_word_length, words, prefix, next,
-                                 adj);
-                        }
-                    }
-                }
+        // Stack containing adjacent vertices to be checked
+        stack<BogVertex*> adjVerts;
+
+        for(BogVertex* adjV : currVert->getAdj()){
+            if(!adjV->wasVisited()){
+                adjVerts.push(adjV);
             }
         }
+        while(!adjVerts.empty()){
+            currNode = lexTree.getRoot();
+            curr = adjVerts.top();
+            adjVerts.pop();
+            cout << "FIRST " << prefix << endl;
+            prefix += curr->getLetters();
+            cout << "SECOND " << prefix << endl;
+            if(!lexTree.isPrefix(prefix)){
+                prefix = origPref;
+                continue;
+            }
 
+            cout << "FINE1" << endl;
+            // Go down the tree to the correct node
+            for(char c : prefix){
+                currNode = currNode->getChildren()[c];
+            }
+
+            cout << "FINE2" << endl;
+            // No more possible words can be formed from this 
+            if(currNode != 0 && currNode->noMoreWords() 
+               && currNode->isEndWord()){
+            cout << "FINE3" << endl;
+                if(prefix.size() >= minimum_word_length){
+                    words->insert(prefix);
+                }
+                prefix = origPref;
+                currNode = lexTree.getRoot();
+                for(char c : prefix){
+                    currNode = currNode->getChildren()[c];
+                }
+                continue;
+            }
+            else {
+            cout << "FINE4" << endl;
+                curr->setVisited(true);
+
+                if(currNode != 0 && currNode->isEndWord() && 
+                   prefix.size() >= minimum_word_length){
+                    words->insert(prefix);
+                }
+                getWords(curr, prefix, minimum_word_length, words);
+                prefix = origPref;
+                curr->setVisited(false);
+            }
+        }
+        return;
     }
 
     /**
@@ -247,7 +304,7 @@
                 }
 
                 vert->setVisited(true);
-                pos = pos + 1;
+                pos = pos + compareStr.size();
                 valid = true;
                 locations.push_back(vert->getPosition());
                 // If the sizes are the same, this means the word

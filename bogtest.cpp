@@ -29,17 +29,22 @@ int main (int argc, char* argv[]) {
 //  string* board[] = {row0,row1,row2};
 //  set<string> words;
 //  vector<int> locations;
-string row0[] = {"T","H","L","I"};
-string row1[] = {"R","E","A","D"};
-string row2[] = {"I","L","M","O"};
-string row3[] = {"F","P","S","N"};
+string row0[] = {"J","N","R","A"};
+string row1[] = {"D","S","A","Qu"};
+string row2[] = {"L","H","L","X"};
+string row3[] = {"E","F","C","V"};
+//string row0[] = {"T","H","L","I"};
+//string row1[] = {"R","E","A","D"};
+//string row2[] = {"I","L","M","O"};
+//string row3[] = {"F","P","S","N"};
 string* board[] = {row0,row1,row2,row3};
  
  set<string> words;
  vector<int> locations;
  p->buildLexicon(lex);
  p->setBoard(4,4,board);    //<-------this is important
- std::vector<int>checkVector;
+ 
+/* std::vector<int>checkVector;
  checkVector = p->isOnBoard("TRIP");
  if(checkVector.size()==4)
  {
@@ -200,7 +205,7 @@ string* board[] = {row0,row1,row2,row3};
      }
      std::cout<<"\n";
  };
-
+*/
   string word;
   ifstream infile;
   infile.open(argv[1]);
@@ -223,8 +228,8 @@ string* board[] = {row0,row1,row2,row3};
           cout << " IS NOT IN " << endl;
       }
   }
-/*  p->setBoard(3,3,board);
-  for(int i = 0; i < 9; i++){    
+
+  for(int i = 0; i < 16; i++){    
      cout << "Key " << p->getBoard().getMap()[i]->getLetters() << ": ";
      for(BogVertex* hi : p->getBoard().getMap()[i]->getAdj()){
          cout << hi->getLetters() << " ";
@@ -232,15 +237,15 @@ string* board[] = {row0,row1,row2,row3};
      cout << endl;
   }
 
-  if(p->isOnBoard("dt").size() > 0) {
-      for(int i : p->isOnBoard("dt")){
+  if(p->isOnBoard("aqua").size() > 0) {
+      for(int i : p->isOnBoard("aqua")){
           cout << i << " ";
       }
       cout << endl;
   } else {
       cout << "NO LIST" << endl;
   }
-
+/*
   if(p->isInLexicon(wordX)) {
     std::cerr << "Apparent problem with isInLexicon #1." << std::endl;
     return -1;
