@@ -39,9 +39,8 @@ string row3[] = {"E","F","C","V"};
 //string row3[] = {"F","P","S","N"};
 string* board[] = {row0,row1,row2,row3};
  
- set<string> words;
+// set<string> words;
  vector<int> locations;
- p->buildLexicon(lex);
  p->setBoard(4,4,board);    //<-------this is important
  
 /* std::vector<int>checkVector;
@@ -217,7 +216,28 @@ string* board[] = {row0,row1,row2,row3};
   infile.close();
 
   p->buildLexicon(lex);
+  set<string> list;
+  infile.open(argv[1]);
+  while(infile.is_open() && infile.good()){
+      getline(infile, word);
+      if(p->isOnBoard(word).size() > 0 && word.size() >= 4){
+          list.insert(word);
+      }
+  }
+  infile.close();
 
+  set<string> validList;
+  p->getAllValidWords(4, &validList);
+  
+  cout << validList.size() << endl;
+  cout << list.size() << endl;
+/*  for(string s : list){
+      cout << s << endl;
+  }
+cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
+  for(string p : validList){
+      cout << p << endl;
+  }
   infile.open(argv[1]);
 
   while(infile.is_open() && infile.good()){
@@ -245,7 +265,7 @@ string* board[] = {row0,row1,row2,row3};
   } else {
       cout << "NO LIST" << endl;
   }
-/*
+
   if(p->isInLexicon(wordX)) {
     std::cerr << "Apparent problem with isInLexicon #1." << std::endl;
     return -1;
