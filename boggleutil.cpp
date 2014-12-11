@@ -101,7 +101,7 @@
     int LSTNode::getPos(){
         return position;
     }
-    void LSTNode::setPos(unsigned int i){
+    void LSTNode::setPos(int i){
         position = i;
     }
 
@@ -111,8 +111,8 @@
      */
     void LST::addChild(LSTNode* parent, char c){
         parent->setChildren(c , new LSTNode()); 
-        allNodes[pos] = parent->getChildren()[c];
-        allNodes[pos]->setPos(pos);
+        allNodes[pos] = parent->getChildren()[c]; 
+        parent->getChildren()[c]->setPos(pos);
         pos = pos + 1;
     }
 
@@ -129,12 +129,12 @@
     // Checks if string is prefix
     bool LST::isPrefix(string pref){
         LSTNode* curr = root;
-        for(char c : pref){
-            if(curr->getChildren()[c] == nullptr){
+        for(string::size_type i = 0; i < pref.size(); i++){
+            if(curr->getChildren()[pref[i]] == nullptr){
                 return false;
             }
             else {
-                curr = curr->getChildren()[c];
+                curr = curr->getChildren()[pref[i]];
             }
         }
         return true;

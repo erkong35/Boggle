@@ -112,7 +112,7 @@ class LSTNode{
 
         // Getters and Setters for the position of the word
         int getPos();
-        void setPos(unsigned int i);
+        void setPos(int i);
 
     private:
         // Unordered map of the children of this node
@@ -121,7 +121,7 @@ class LSTNode{
         // True if this node is the end of a word
         unordered_map<char, bool> fullWords;
 
-        unsigned int position;
+        int position;
 };
 
 class LST{
@@ -133,6 +133,7 @@ class LST{
         LST(){
             root = new LSTNode();
             allNodes[pos] = root;
+            root->setPos(pos);
             pos = pos + 1;
         }
 
@@ -158,6 +159,6 @@ class LST{
         LSTNode* root;
 
         // Holds current position for the map
-        unsigned int pos = 0;
+        int pos = 0;
 };
 #endif

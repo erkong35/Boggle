@@ -241,8 +241,8 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
   
   cout << validList.size() << endl;
   cout << list.size() << endl;
-/*
-  infile.open(argv[1]);
+
+/*  infile.open(argv[1]);
   while(infile.is_open() && infile.good()){
       getline(infile, word);
       if(p->isInLexicon(word)) {
@@ -300,7 +300,7 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
     return -1;
   }*/ 
 
-  /*  BogglePlayer* p = new BogglePlayer();
+/*    BogglePlayer* p = new BogglePlayer();
 
     std::set<string> lex;
     std::set<string> results;
@@ -350,10 +350,15 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
     p->getAllValidWords(2, &results);
 
     std::cout << "wc: " << results.size() << "\n";
+    ofstream out("bob.txt");
+    for(string s: results){
+        out << s << endl;
+    }
+    for(string s : results){
+        cout << s << endl;
+    }
+    */
 
-    std::set<string>::iterator i = results.begin();
-    std::set<string>::iterator e = results.end();
-*/
     delete p;
     return 0;
 }

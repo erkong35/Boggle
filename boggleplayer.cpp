@@ -4,14 +4,16 @@
      * Destructs the object after game is over
      */
     BogglePlayer::~BogglePlayer(){
-        for(auto node : lexTree.getAllNodes()){
+        for(auto node : lexTree->getAllNodes()){
             delete(node.second);
             node.second = nullptr;
         }
-        for(auto vert : boardGraph.getMap()){
+        delete(lexTree);
+        for(auto vert : boardGraph->getMap()){
             delete(vert.second);
             vert.second = nullptr;
         }
+        delete(boardGraph);
     }
 
     /**
@@ -19,24 +21,32 @@
      * lexicon created to true.
      */
     void BogglePlayer::buildLexicon(const set<string>& word_list){
+        if(lexIsSet){
+            for(auto node : lexTree->getAllNodes()){
+                delete(node.second);
+                node.second = nullptr;
+            }
+            lexTree = new LST();
+        }
+
         LSTNode* parent;
         char last;
         // Creates new children for each character in string 
         for(string s : word_list){
-            parent = lexTree.getRoot();
+            parent = lexTree->getRoot();
             for(string::size_type i = 0; i < s.size(); i++){
                 // Adds child at character if child not already there
+                last = s[i];
                 if(parent->getChildren()[s[i]] == nullptr){
-                    lexTree.addChild(parent, s[i]);
+                    lexTree->addChild(parent, s[i]);
                 }
                 if(i < s.size() - 1){
                     parent = parent->getChildren()[s[i]];
                 }
-                last = s[i];
             }
+            parent->setEndWord(last);
             // End of the string is a word, so set the last node's boolean to 
             // mark end of word
-            parent->setEndWord(last);
         }
         lexIsSet = true;
     }
@@ -50,8 +60,15 @@
      */
     void BogglePlayer::setBoard(unsigned int rows, unsigned int cols, 
                                 string** diceArray){
+        if(boardIsSet){
+            for(auto vert : boardGraph->getMap()){
+                delete(vert.second);
+                vert.second = nullptr;
+            }
+            boardGraph = new BogGraph();
+        }
 
-        boardGraph.setCols(cols);
+        boardGraph->setCols(cols);
         // string being added to the board
         string toAdd;
         // Adds dice to the BogGraph using the strings from diceArray
@@ -60,7 +77,7 @@
                 // Sets everything to lowercase before adding
                 toAdd = diceArray[r][c];
                 transform(toAdd.begin(), toAdd.end(), toAdd.begin(), ::tolower);
-                boardGraph.addVertex(r * cols + c, toAdd);
+                boardGraph->addVertex(r * cols + c, toAdd);
             }
         }
 
@@ -69,19 +86,19 @@
             for(unsigned int c = 0; c < cols; c++){
                 // Adds vertice one to the right
                 if(c < cols - 1){
-                    boardGraph.addEdge(r * cols + c, r * cols + (c + 1));
+                    boardGraph->addEdge(r * cols + c, r * cols + (c + 1));
                 }
                 // Adds vertice one to the left
                 if(r < rows - 1){
-                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + c);
+                    boardGraph->addEdge(r * cols + c, (r + 1) * cols + c);
                 }
                 // Adds vertice diagonally in the southwest direction
                 if(c > 0 && r < rows - 1){
-                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c - 1));
+                    boardGraph->addEdge(r * cols + c, (r + 1) * cols + (c - 1));
                 }
                 // Adds vertice diagonally in the southeast direction
                 if(c < cols - 1 && r < rows - 1){
-                    boardGraph.addEdge(r * cols + c, (r + 1) * cols + (c + 1));
+                    boardGraph->addEdge(r * cols + c, (r + 1) * cols + (c + 1));
                 }
             }
         }
@@ -100,7 +117,7 @@
             return false;
         }
 
-        for(auto vert : boardGraph.getMap()){
+        for(auto vert : boardGraph->getMap()){
             vert.second->setVisited(false);
         }
 
@@ -108,11 +125,11 @@
         // Keep track of current node
         LSTNode* curr;
         char last;
-        for(auto vert : boardGraph.getMap()){
-            curr = lexTree.getRoot();
+        for(auto vert : boardGraph->getMap()){
+            curr = lexTree->getRoot();
 
             // If the word on the dice face is not a prefix, go to next die
-            if(!lexTree.isPrefix(vert.second->getLetters())){
+            if(!lexTree->isPrefix(vert.second->getLetters())){
                 continue;
             } 
 
@@ -172,18 +189,19 @@
             }
         }
         while(!adjVerts.empty()){
-            currNode = lexTree.getRoot();
+            currNode = lexTree->getRoot();
             curr = adjVerts.top();
             adjVerts.pop();
             prefix += curr->getLetters();
 
-            if(!lexTree.isPrefix(prefix)){
+            if(!lexTree->isPrefix(prefix)){
                 prefix = origPref;
                 continue;
             }
 
             // Go down the tree to the correct node
-            for(string::size_type i = 0; i < prefix.size(); i++){
+            for(string::size_type i = 0;
+                i < prefix.size(); i++){
                 if(i < prefix.size() - 1){
                     currNode = currNode->getChildren()[prefix[i]];
                 }
@@ -197,7 +215,6 @@
                     words->insert(prefix);
                 }
                 prefix = origPref;
-                currNode = lexTree.getAllNodes()[position];
                 continue;
             }
             else {
@@ -231,7 +248,7 @@
 
         // Traverse the lexicon, comparing characters as it goes
         // If character is not found, return false, else keep traversing
-        LSTNode* curr  = lexTree.getRoot();
+        LSTNode* curr  = lexTree->getRoot();
         for(string::size_type i = 0; i < tmp.size(); i++){
             if(curr->getChildren()[tmp[i]] == nullptr){
                 return false;
@@ -282,13 +299,13 @@
         stack<BogVertex*> vertStack;
 
         // Reset vertices to not visited for next call to isOnBoard
-        for(auto vert : boardGraph.getMap()){
+        for(auto vert : boardGraph->getMap()){
             vert.second->setVisited(false);
             vert.second->setRevisited(false);
         }
 
-        for(int i = boardGraph.getMap().size() - 1; i >= 0; i--){
-            vertStack.push(boardGraph.getMap()[i]);
+        for(int i = boardGraph->getMap().size() - 1; i >= 0; i--){
+            vertStack.push(boardGraph->getMap()[i]);
         }
 
         // Vertex that keeps track of current vertice
@@ -312,7 +329,7 @@
                 // recently added location.  If it is not adj, then the loop
                 // ends and word is not found on board.
                 if(locations.size() > 0){
-                    vector<BogVertex*> adj = boardGraph.getMap()
+                    vector<BogVertex*> adj = boardGraph->getMap()
                                              [locations.back()]->getAdj();
                     if(find(adj.begin(), adj.end(), vert) == adj.end()){
                         valid = false;
@@ -356,12 +373,12 @@
     }
 
     // Getter for the board graph
-    BogGraph BogglePlayer::getBoard(){
+    BogGraph* BogglePlayer::getBoard(){
         return boardGraph;
     }
 
     // Getter for the Lexicon trie
-    LST BogglePlayer::getLex(){
+    LST* BogglePlayer::getLex(){
         return lexTree;
     }
 

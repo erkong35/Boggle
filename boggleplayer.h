@@ -69,10 +69,10 @@ class BogglePlayer : public BaseBogglePlayer{
                             unsigned int *cols);
 
         // Getter for the board graph
-        BogGraph getBoard();
+        BogGraph* getBoard();
 
         // Getter for the Lexicon trie
-        LST getLex();
+        LST* getLex();
 
     private:
         // Booleans to check if setBoard() and buildLexicon() were called
@@ -80,10 +80,10 @@ class BogglePlayer : public BaseBogglePlayer{
         bool lexIsSet;
 
         // Graph for the board
-        BogGraph boardGraph;
+        BogGraph* boardGraph = new BogGraph();
 
         // Lexicon search tree for the lexicon
-        LST lexTree;
+        LST* lexTree = new LST();
 };
 
 #endif 
