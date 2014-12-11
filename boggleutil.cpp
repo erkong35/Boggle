@@ -97,6 +97,14 @@
         return children.empty();
     }
 
+    // Getter and setter for the position of the word
+    int LSTNode::getPos(){
+        return position;
+    }
+    void LSTNode::setPos(unsigned int i){
+        position = i;
+    }
+
     /**
      * Adds a child to the specified parent node at the specified 
      * character c.  Also adds to the map of all nodes in the tree.
@@ -104,6 +112,7 @@
     void LST::addChild(LSTNode* parent, char c){
         parent->setChildren(c , new LSTNode()); 
         allNodes[pos] = parent->getChildren()[c];
+        allNodes[pos]->setPos(pos);
         pos = pos + 1;
     }
 

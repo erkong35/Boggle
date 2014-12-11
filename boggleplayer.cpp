@@ -138,7 +138,7 @@
                    vert.second->getLetters().size() >= minimum_word_length){
                     words->insert(vert.second->getLetters());
                 }
-                getWords(vert.second, vert.second->getLetters(),
+                getWords(vert.second, vert.second->getLetters(), curr->getPos(),
                          minimum_word_length, words);
                 vert.second->setVisited(false);
             }
@@ -149,6 +149,7 @@
     }
 
     void BogglePlayer::getWords(BogVertex* currVert, string prefix, 
+                                unsigned int position,
                                 unsigned int minimum_word_length,
                                 set<string>* words){ 
 
@@ -196,12 +197,7 @@
                     words->insert(prefix);
                 }
                 prefix = origPref;
-                currNode = lexTree.getRoot();
-                for(string::size_type i = 0; i < prefix.size(); i++){
-                    if(i < prefix.size() - 1){
-                        currNode = currNode->getChildren()[prefix[i]];
-                    }
-                }
+                currNode = lexTree.getAllNodes()[position];
                 continue;
             }
             else {
@@ -211,7 +207,8 @@
                    prefix.size() >= minimum_word_length){
                     words->insert(prefix);
                 }
-                getWords(curr, prefix,  minimum_word_length, words);
+                getWords(curr, prefix, currNode->getPos(),
+                         minimum_word_length, words);
                 prefix = origPref;
                 curr->setVisited(false);
             }

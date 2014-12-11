@@ -110,12 +110,18 @@ class LSTNode{
         // Returns true if the word is not a prefix for anymore words
         bool noMoreWords();
 
+        // Getters and Setters for the position of the word
+        int getPos();
+        void setPos(unsigned int i);
+
     private:
         // Unordered map of the children of this node
         unordered_map<char, LSTNode*> children;
 
         // True if this node is the end of a word
         unordered_map<char, bool> fullWords;
+
+        unsigned int position;
 };
 
 class LST{

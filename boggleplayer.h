@@ -45,7 +45,7 @@ class BogglePlayer : public BaseBogglePlayer{
         bool getAllValidWords(unsigned int minimum_word_length, 
                               set<string>* words);
 
-        void getWords(BogVertex* currVert, string prefix,  
+        void getWords(BogVertex* currVert, string prefix, unsigned int position,
                       unsigned int minimum_word_length, set<string>* words);
 
         /**
