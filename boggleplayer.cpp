@@ -100,8 +100,11 @@
             return false;
         }
 
-        clock_t start;
-        start = clock();
+        for(auto vert : boardGraph.getMap()){
+            vert.second->setVisited(false);
+        }
+
+        time_t start = time(0);
         // Keep track of current node
         LSTNode* curr;
         char last;
@@ -140,7 +143,7 @@
                 vert.second->setVisited(false);
             }
         }
-        cout << "TME: " << clock() - start << endl;
+        cout << "TIME: " << difftime(time(0), start) << endl;
         
         return true;
     }

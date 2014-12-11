@@ -15,7 +15,7 @@ using namespace std;
 
 int main (int argc, char* argv[]) {
 
-/*  BogglePlayer * p = new BogglePlayer();
+  BogglePlayer * p = new BogglePlayer();
   set<string> lex;
   string wordA("a");
   string wordX("x");
@@ -42,7 +42,7 @@ string* board[] = {row0,row1,row2,row3};
 // set<string> words;
  vector<int> locations;
  p->setBoard(4,4,board);    //<-------this is important
-*/
+
 /* std::vector<int>checkVector;
  checkVector = p->isOnBoard("TRIP");
  if(checkVector.size()==4)
@@ -205,7 +205,7 @@ string* board[] = {row0,row1,row2,row3};
      std::cout<<"\n";
  };
 */
-/*  string word;
+  string word;
   ifstream infile;
   infile.open(argv[1]);
   while(infile.is_open() && infile.good()){
@@ -223,14 +223,14 @@ string* board[] = {row0,row1,row2,row3};
   infile.open(argv[1]);
   while(infile.is_open() && infile.good()){
       getline(infile, word);
-      if(p->isOnBoard(word).size() > 0 && word.size() >= 5){
+      if(p->isOnBoard(word).size() > 0 && word.size() >= 2){
           list.insert(word);
       }
   }
   infile.close();
 
   set<string> validList;
-  p->getAllValidWords(5, &validList);
+  p->getAllValidWords(2, &validList);
   for(string s : list){
       cout << s << endl;
   }
@@ -241,7 +241,7 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
   
   cout << validList.size() << endl;
   cout << list.size() << endl;
-
+/*
   infile.open(argv[1]);
   while(infile.is_open() && infile.good()){
       getline(infile, word);
@@ -300,7 +300,7 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
     return -1;
   }*/ 
 
-    BogglePlayer p;
+  /*  BogglePlayer* p = new BogglePlayer();
 
     std::set<string> lex;
     std::set<string> results;
@@ -342,18 +342,18 @@ cout << "WOEIFJOWEIFJOWEJIFWOIEJFOWEJFOWIJEFOWJFOWEIF" << endl;
     in.close();
 
     // Prepare the BogglePlayer object
-    p.buildLexicon(lex);
-    p.setBoard(rows, cols, brd);
+    p->buildLexicon(lex);
+    p->setBoard(rows, cols, brd);
 
     // Get the results
     cout << "HERE " << endl;
-    p.getAllValidWords(2, &results);
+    p->getAllValidWords(2, &results);
 
     std::cout << "wc: " << results.size() << "\n";
 
     std::set<string>::iterator i = results.begin();
     std::set<string>::iterator e = results.end();
-
-//    delete p;
+*/
+    delete p;
     return 0;
 }

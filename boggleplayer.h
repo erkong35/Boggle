@@ -5,7 +5,6 @@
 #include "baseboggleplayer.h"
 
 #include <stack>
-#include <ctime>
 
 using namespace std;
 
