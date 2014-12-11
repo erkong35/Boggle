@@ -87,12 +87,15 @@ class BogGraph{
 class LSTNode{
     public:
         /**
-         * Constructs an LSTNode that holds the characters a-z.  Initially
+         * Constructs an LSTNo  de that holds the characters a-z.  Initially
          * sets all values of children to null pointers.
          */
         LSTNode(){
             for(char c = 'a'; c <='z'; c++){
                 children[c] = nullptr;
+            }
+            for(char c = 'a'; c <='z'; c++){
+                fullWords[c] = false;
             }
         }
 
@@ -101,8 +104,8 @@ class LSTNode{
         void setChildren(char c, LSTNode* child);
 
         // Getter and setter for the boolean that checks for end of a word
-        bool isEndWord();
-        void setEndWord(); 
+        bool isEndWord(char c);
+        void setEndWord(char c); 
 
         // Returns true if the word is not a prefix for anymore words
         bool noMoreWords();
@@ -112,7 +115,7 @@ class LSTNode{
         unordered_map<char, LSTNode*> children;
 
         // True if this node is the end of a word
-        bool isEnd;
+        unordered_map<char, bool> fullWords;
 };
 
 class LST{

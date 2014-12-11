@@ -85,11 +85,11 @@
     }
 
     // Getter and setter for the boolean that checks for end of a word
-    bool LSTNode::isEndWord(){
-        return isEnd; 
+    bool LSTNode::isEndWord(char c){
+        return fullWords[c];
     }
-    void LSTNode::setEndWord(){
-        isEnd = true;
+    void LSTNode::setEndWord(char c){
+        fullWords[c] = true;
     }
 
     // Returns true if the word is not a prefix for anymore words

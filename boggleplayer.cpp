@@ -20,19 +20,23 @@
      */
     void BogglePlayer::buildLexicon(const set<string>& word_list){
         LSTNode* parent;
+        char last;
         // Creates new children for each character in string 
         for(string s : word_list){
             parent = lexTree.getRoot();
-            for(char c : s){
+            for(string::size_type i = 0; i < s.size(); i++){
                 // Adds child at character if child not already there
-                if(parent->getChildren()[c] == nullptr){
-                    lexTree.addChild(parent, c);
+                if(parent->getChildren()[s[i]] == nullptr){
+                    lexTree.addChild(parent, s[i]);
                 }
-                parent = parent->getChildren()[c];
+                if(i < s.size() - 1){
+                    parent = parent->getChildren()[s[i]];
+                }
+                last = s[i];
             }
             // End of the string is a word, so set the last node's boolean to 
             // mark end of word
-            parent->setEndWord();
+            parent->setEndWord(last);
         }
         lexIsSet = true;
     }
@@ -96,8 +100,11 @@
             return false;
         }
 
+        clock_t start;
+        start = clock();
         // Keep track of current node
         LSTNode* curr;
+        char last;
         for(auto vert : boardGraph.getMap()){
             curr = lexTree.getRoot();
 
@@ -107,12 +114,16 @@
             } 
 
             // Go down the tree to the correct node
-            for(char c : vert.second->getLetters()){
-                curr = curr->getChildren()[c];
+            for(string::size_type i = 0; 
+                i < vert.second->getLetters().size(); i++){
+                if(i < vert.second->getLetters().size() - 1){
+                    curr = curr->getChildren()[vert.second->getLetters()[i]];
+                }
+                last = vert.second->getLetters()[i];
             }
 
             // No more possible words can be formed from this 
-            if(curr->noMoreWords() && curr->isEndWord()){
+            if(curr->noMoreWords() && curr->isEndWord(last)){
                 if(vert.second->getLetters().size() >= minimum_word_length){
                     words->insert(vert.second->getLetters());
                 }
@@ -120,15 +131,16 @@
             }
             else {
                 vert.second->setVisited(true);
-                if(curr != 0 && curr->isEndWord() &&
+                if(curr != 0 && curr->isEndWord(last) &&
                    vert.second->getLetters().size() >= minimum_word_length){
                     words->insert(vert.second->getLetters());
                 }
-                getWords(vert.second, vert.second->getLetters(), 
+                getWords(vert.second, vert.second->getLetters(),
                          minimum_word_length, words);
                 vert.second->setVisited(false);
             }
         }
+        cout << "TME: " << clock() - start << endl;
         
         return true;
     }
@@ -145,6 +157,7 @@
 
         // Node to keep track of curr node
         LSTNode* currNode;
+        char last;
 
         // Stack containing adjacent vertices to be checked
         stack<BogVertex*> adjVerts;
@@ -158,44 +171,44 @@
             currNode = lexTree.getRoot();
             curr = adjVerts.top();
             adjVerts.pop();
-            cout << "FIRST " << prefix << endl;
             prefix += curr->getLetters();
-            cout << "SECOND " << prefix << endl;
+
             if(!lexTree.isPrefix(prefix)){
                 prefix = origPref;
                 continue;
             }
 
-            cout << "FINE1" << endl;
             // Go down the tree to the correct node
-            for(char c : prefix){
-                currNode = currNode->getChildren()[c];
+            for(string::size_type i = 0; i < prefix.size(); i++){
+                if(i < prefix.size() - 1){
+                    currNode = currNode->getChildren()[prefix[i]];
+                }
+                last = prefix[i];
             }
 
-            cout << "FINE2" << endl;
             // No more possible words can be formed from this 
             if(currNode != 0 && currNode->noMoreWords() 
-               && currNode->isEndWord()){
-            cout << "FINE3" << endl;
+               && currNode->isEndWord(last)){
                 if(prefix.size() >= minimum_word_length){
                     words->insert(prefix);
                 }
                 prefix = origPref;
                 currNode = lexTree.getRoot();
-                for(char c : prefix){
-                    currNode = currNode->getChildren()[c];
+                for(string::size_type i = 0; i < prefix.size(); i++){
+                    if(i < prefix.size() - 1){
+                        currNode = currNode->getChildren()[prefix[i]];
+                    }
                 }
                 continue;
             }
             else {
-            cout << "FINE4" << endl;
                 curr->setVisited(true);
 
-                if(currNode != 0 && currNode->isEndWord() && 
+                if(currNode != 0 && currNode->isEndWord(last) && 
                    prefix.size() >= minimum_word_length){
                     words->insert(prefix);
                 }
-                getWords(curr, prefix, minimum_word_length, words);
+                getWords(curr, prefix,  minimum_word_length, words);
                 prefix = origPref;
                 curr->setVisited(false);
             }
@@ -214,21 +227,25 @@
 
         string tmp = word_to_check;
         transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+        char last; 
 
         // Traverse the lexicon, comparing characters as it goes
         // If character is not found, return false, else keep traversing
         LSTNode* curr  = lexTree.getRoot();
-        for(char c : tmp){
-            if(curr->getChildren()[c] == nullptr){
+        for(string::size_type i = 0; i < tmp.size(); i++){
+            if(curr->getChildren()[tmp[i]] == nullptr){
                 return false;
             }
             else {
-                curr = curr->getChildren()[c];
+                if(i < tmp.size() - 1){
+                   curr = curr->getChildren()[tmp[i]];
+                }
             }
-        } 
+            last = tmp[i];
+        }
 
         // Return true if ends on a word
-        return curr->isEndWord();
+        return curr->isEndWord(last);
     }
 
     /**
@@ -270,8 +287,8 @@
             vert.second->setRevisited(false);
         }
 
-        for(auto vert : boardGraph.getMap()){
-            vertStack.push(vert.second);
+        for(int i = boardGraph.getMap().size() - 1; i >= 0; i--){
+            vertStack.push(boardGraph.getMap()[i]);
         }
 
         // Vertex that keeps track of current vertice
