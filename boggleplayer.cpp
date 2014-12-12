@@ -121,7 +121,6 @@
             vert.second->setVisited(false);
         }
 
-        time_t start = time(0);
         // Keep track of current node
         LSTNode* curr;
         char last;
@@ -155,18 +154,21 @@
                    vert.second->getLetters().size() >= minimum_word_length){
                     words->insert(vert.second->getLetters());
                 }
-                getWords(vert.second, vert.second->getLetters(), curr->getPos(),
+                getWords(vert.second, vert.second->getLetters(), 
                          minimum_word_length, words);
                 vert.second->setVisited(false);
             }
         }
-        cout << "TIME: " << difftime(time(0), start) << endl;
         
         return true;
     }
 
+    /**
+     * Recursively gets all the words on the board that start with the 
+     * string prefix passed in.  Adds words that are greter than or 
+     * equal to the minimum_word_length to the set words.
+     */
     void BogglePlayer::getWords(BogVertex* currVert, string prefix, 
-                                unsigned int position,
                                 unsigned int minimum_word_length,
                                 set<string>* words){ 
 
@@ -188,6 +190,8 @@
                 adjVerts.push(adjV);
             }
         }
+
+        // Goes through all adjacent vertices
         while(!adjVerts.empty()){
             currNode = lexTree->getRoot();
             curr = adjVerts.top();
@@ -224,8 +228,9 @@
                    prefix.size() >= minimum_word_length){
                     words->insert(prefix);
                 }
-                getWords(curr, prefix, currNode->getPos(),
-                         minimum_word_length, words);
+
+                // Recursive call with the new prefix
+                getWords(curr, prefix, minimum_word_length, words);
                 prefix = origPref;
                 curr->setVisited(false);
             }

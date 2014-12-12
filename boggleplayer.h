@@ -45,7 +45,12 @@ class BogglePlayer : public BaseBogglePlayer{
         bool getAllValidWords(unsigned int minimum_word_length, 
                               set<string>* words);
 
-        void getWords(BogVertex* currVert, string prefix, unsigned int position,
+        /**
+         * Recursively gets all the words on the board that start with the 
+         * string prefix passed in.  Adds words that are greter than or 
+         * equal to the minimum_word_length to the set words.
+         */
+        void getWords(BogVertex* currVert, string prefix, 
                       unsigned int minimum_word_length, set<string>* words);
 
         /**

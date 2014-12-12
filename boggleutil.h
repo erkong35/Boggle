@@ -110,10 +110,6 @@ class LSTNode{
         // Returns true if the word is not a prefix for anymore words
         bool noMoreWords();
 
-        // Getters and Setters for the position of the word
-        int getPos();
-        void setPos(int i);
-
     private:
         // Unordered map of the children of this node
         unordered_map<char, LSTNode*> children;
@@ -133,7 +129,6 @@ class LST{
         LST(){
             root = new LSTNode();
             allNodes[pos] = root;
-            root->setPos(pos);
             pos = pos + 1;
         }
 
